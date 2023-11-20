@@ -26,6 +26,7 @@
 #include "objectlistmodel.h"
 #include "openedproject.h"
 #include "schematicgui.h"
+
 #include <librepcb/core/application.h>
 #include <librepcb/core/fileio/filepath.h>
 
@@ -120,7 +121,8 @@ void EditorWindow::setCurrentProject(
   }
 }
 
-void EditorWindow::setCurrentSchematic(std::shared_ptr<SchematicGui> s) noexcept {
+void EditorWindow::setCurrentSchematic(
+    std::shared_ptr<SchematicGui> s) noexcept {
   if (s != mCurrentSchematic) {
     mCurrentSchematic = s;
     emit currentSchematicChanged();

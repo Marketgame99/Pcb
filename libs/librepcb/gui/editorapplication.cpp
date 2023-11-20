@@ -37,9 +37,12 @@
 #include <librepcb/editor/dialogs/directorylockhandlerdialog.h>
 #include <librepcb/editor/dialogs/filedialog.h>
 #include <librepcb/editor/project/newprojectwizard/newprojectwizard.h>
-#include <librepcb/editor/workspace/workspacesettingsdialog.h>
 #include <librepcb/editor/workspace/librarymanager/librarymanager.h>
+#include <librepcb/editor/workspace/workspacesettingsdialog.h>
+
 #include <QtCore>
+
+#include <openglview.h>
 
 /*******************************************************************************
  *  Namespace
@@ -58,6 +61,8 @@ EditorApplication::EditorApplication(Workspace& ws, QObject* parent)
     mWindows(),
     mWorkspaceLibraries(new ObjectListModel(this)),
     mOpenedProjects(new ObjectListModel(this)) {
+  qmlRegisterType<OpenGlView>("org.librepcb.qmlcomponents", 1, 0, "OpenGlView");
+
   mWindows.append(std::make_shared<EditorWindow>(*this));
 
   /*QMultiMap<Version, FilePath> libraries =

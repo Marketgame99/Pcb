@@ -135,7 +135,7 @@ ControlPanel::ControlPanel(Workspace& workspace, bool fileFormatIsOutdated)
          "library manager</a> to add some libraries.")
           .arg("library-manager"),
       false);
-  //connect(mUi->msgWarnForNoLibraries, &MessageWidget::linkActivated, this,
+  // connect(mUi->msgWarnForNoLibraries, &MessageWidget::linkActivated, this,
   //        &ControlPanel::openLibraryManager);
   connect(
       &mWorkspace.getLibraryDb(), &WorkspaceLibraryDb::scanLibraryListUpdated,
@@ -152,7 +152,8 @@ ControlPanel::ControlPanel(Workspace& workspace, bool fileFormatIsOutdated)
   // connect some actions which are created with the Qt Designer
   connect(mUi->openLibraryManagerButton, &QPushButton::clicked,
           mActionLibraryManager.data(), &QAction::trigger);
-  //connect(mLibraryManager.data(), &LibraryManager::openLibraryEditorTriggered,
+  // connect(mLibraryManager.data(),
+  // &LibraryManager::openLibraryEditorTriggered,
   //        this, &ControlPanel::openLibraryEditor);
   connect(mUi->textBrowser, &QTextBrowser::anchorClicked, this,
           [this](QUrl url) {
@@ -238,7 +239,7 @@ void ControlPanel::openProjectLibraryUpdater(const FilePath& project) noexcept {
 void ControlPanel::createActions() noexcept {
   const EditorCommandSet& cmd = EditorCommandSet::instance();
 
-  //mActionLibraryManager.reset(cmd.libraryManager.createAction(
+  // mActionLibraryManager.reset(cmd.libraryManager.createAction(
   //    this, this, &ControlPanel::openLibraryManager,
   //    EditorCommand::ActionFlag::ApplicationShortcut));
   mActionRescanLibraries.reset(cmd.workspaceLibrariesRescan.createAction(
