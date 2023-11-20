@@ -21,6 +21,7 @@
  *  Includes
  ******************************************************************************/
 #include "openglrenderer.h"
+
 #include <QtCore>
 
 /*******************************************************************************
@@ -87,12 +88,13 @@ QOpenGLFramebufferObject* OpenGlRenderer::createFramebufferObject(
   return new QOpenGLFramebufferObject(size, format);
 }
 
-void OpenGlRenderer::synchronize(QQuickFramebufferObject* qqfbo) noexcept  {
+void OpenGlRenderer::synchronize(QQuickFramebufferObject* qqfbo) noexcept {
   m_window = qqfbo->window();
 }
 
 void OpenGlRenderer::render() noexcept {
-  glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+  // glClearColor(0.0f, 0.5f, 0.7f, 1.0f);
 
   glClear(GL_COLOR_BUFFER_BIT);
 
@@ -102,17 +104,17 @@ void OpenGlRenderer::render() noexcept {
   m_program.bind();
 
   // paint
-  //m_program.enableAttributeArray("aPos");
-  //m_program.enableAttributeArray("aTexCoord");
-  //m_program.setAttributeArray("aPos", m_vertices.constData());
-  //m_program.setAttributeArray("vTexCoord", m_texCoords.constData());
-  //glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
-  //m_program.disableAttributeArray("aPos");
-  //m_program.disableAttributeArray("aTexCoord");
+  // m_program.enableAttributeArray("aPos");
+  // m_program.enableAttributeArray("aTexCoord");
+  // m_program.setAttributeArray("aPos", m_vertices.constData());
+  // m_program.setAttributeArray("vTexCoord", m_texCoords.constData());
+  // glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+  // m_program.disableAttributeArray("aPos");
+  // m_program.disableAttributeArray("aTexCoord");
 
+  glBegin(GL_POINTS);
   glColor3f(1.0, 0.0, 0.0);
   glPointSize(10.0f);
-  glBegin(GL_POINTS);
   glVertex2i(0, 0);
   glEnd();
 

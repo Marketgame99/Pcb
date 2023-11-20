@@ -50,7 +50,7 @@ public:
 protected:  // Inherited Methods
   QOpenGLFramebufferObject* createFramebufferObject(
       const QSize& size) noexcept override;
-  void synchronize(QQuickFramebufferObject* qqfbo) noexcept override ;
+  void synchronize(QQuickFramebufferObject* qqfbo) noexcept override;
   void render() noexcept override;
 
 private:
