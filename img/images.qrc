@@ -13,6 +13,10 @@
         <file>actions/add_value.png</file>
         <file>actions/add_via.png</file>
         <file>actions/apply.png</file>
+        <file>actions/projects.png</file>
+        <file>actions/libraries.png</file>
+        <file>actions/checks.png</file>
+        <file>actions/find.png</file>
         <file>actions/board_editor.png</file>
         <file>actions/bookmark.png</file>
         <file>actions/bookmark_gray.png</file>
