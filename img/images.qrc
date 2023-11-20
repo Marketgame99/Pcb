@@ -8,6 +8,7 @@
         <file>actions/add_smt_pad.png</file>
         <file>actions/add_symbol_pin.png</file>
         <file>actions/add_text.png</file>
+        <file>actions/home.svg</file>
         <file>actions/add_tht_pad.png</file>
         <file>actions/add_value.png</file>
         <file>actions/add_via.png</file>
