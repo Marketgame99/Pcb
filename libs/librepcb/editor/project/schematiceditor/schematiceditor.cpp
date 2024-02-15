@@ -50,6 +50,7 @@
 #include <librepcb/core/application.h>
 #include <librepcb/core/project/circuit/circuit.h>
 #include <librepcb/core/project/circuit/componentinstance.h>
+#include <librepcb/core/project/erc/electricalrulecheckmessages.h>
 #include <librepcb/core/project/project.h>
 #include <librepcb/core/project/schematic/items/si_symbol.h>
 #include <librepcb/core/project/schematic/schematic.h>
@@ -251,6 +252,7 @@ bool SchematicEditor::setActiveSchematicIndex(int index) noexcept {
     mVisibleSceneRect[schematic->getUuid()] =
         mUi->graphicsView->getVisibleSceneRect();
   }
+  clearErcMarker();  // Delete marker graphics item before deleting scene!
   mUi->graphicsView->setScene(nullptr);
   mGraphicsScene.reset();
   while (!mSchematicConnections.isEmpty()) {
@@ -778,6 +780,8 @@ void SchematicEditor::createDockWidgets() noexcept {
   mDockErc->setApprovals(mProject.getErcMessageApprovals());
   connect(&mProject, &Project::ercMessageApprovalsChanged, mDockErc.data(),
           &RuleCheckDock::setApprovals);
+  connect(mDockErc.data(), &RuleCheckDock::messageSelected, this,
+          &SchematicEditor::highlightErcMessage);
   connect(mDockErc.data(), &RuleCheckDock::messageApprovalRequested,
           &mProjectEditor, &ProjectEditor::setErcMessageApproved);
   connect(&mProjectEditor, &ProjectEditor::ercFinished, mDockErc.data(),
@@ -922,6 +926,7 @@ bool SchematicEditor::graphicsViewEventHandler(QEvent* event) {
       Q_ASSERT(e);
       switch (e->button()) {
         case Qt::LeftButton: {
+          clearErcMarker();  // Clear ERC location on click.
           mFsm->processGraphicsSceneLeftMouseButtonPressed(*e);
           break;
         }
@@ -1152,6 +1157,43 @@ void SchematicEditor::goToSymbol(const QString& name, int index) noexcept {
       }
     }
   }
+}
+
+void SchematicEditor::highlightErcMessage(const RuleCheckMessage& msg,
+                                          bool zoomTo) noexcept {
+  const ErcMsgBase* ercMsg = dynamic_cast<const ErcMsgBase*>(&msg);
+  const Schematic* schematic = (ercMsg && ercMsg->getSchematic())
+      ? mProject.getSchematicByUuid(*ercMsg->getSchematic())
+      : nullptr;
+  if (schematic && (!msg.getLocations().isEmpty()) &&
+      setActiveSchematicIndex(mProject.getSchematicIndex(*schematic)) &&
+      mGraphicsScene) {
+    const ThemeColor& color =
+        mProjectEditor.getWorkspace().getSettings().themes.getActive().getColor(
+            Theme::Color::sSchematicOverlays);
+    QPainterPath path = Path::toQPainterPathPx(msg.getLocations(), true);
+    mErcLocationGraphicsItem.reset(new QGraphicsPathItem());
+    mErcLocationGraphicsItem->setZValue(999);
+    mErcLocationGraphicsItem->setPen(QPen(color.getPrimaryColor(), 0));
+    mErcLocationGraphicsItem->setBrush(color.getSecondaryColor());
+    mErcLocationGraphicsItem->setPath(path);
+    mGraphicsScene->addItem(*mErcLocationGraphicsItem.data());
+
+    qreal margin = Length(1000000).toPx();
+    QRectF rect = path.boundingRect();
+    rect.adjust(-margin, -margin, margin, margin);
+    mUi->graphicsView->setSceneRectMarker(rect);
+    if (zoomTo) {
+      mUi->graphicsView->zoomToRect(rect);
+    }
+  } else {
+    clearErcMarker();
+  }
+}
+
+void SchematicEditor::clearErcMarker() noexcept {
+  mErcLocationGraphicsItem.reset();
+  mUi->graphicsView->setSceneRectMarker(QRectF());
 }
 
 void SchematicEditor::updateEmptySchematicMessage() noexcept {

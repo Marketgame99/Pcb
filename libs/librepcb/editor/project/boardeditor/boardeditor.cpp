@@ -302,6 +302,7 @@ bool BoardEditor::setActiveBoardIndex(int index) noexcept {
       storeLayersVisibility();
     }
 
+    clearDrcMarker();  // Delete marker graphics item before deleting scene!
     mUi->graphicsView->setScene(nullptr);
     mGraphicsScene.reset();
     mActiveBoard = newBoard;

@@ -39,6 +39,7 @@
 namespace librepcb {
 
 class Project;
+class RuleCheckMessage;
 class SI_Symbol;
 class Schematic;
 class Theme;
@@ -136,6 +137,8 @@ private:
   QList<SI_Symbol*> getSearchCandidates() noexcept;
   QStringList getSearchToolBarCompleterList() noexcept;
   void goToSymbol(const QString& name, int index) noexcept;
+  void highlightErcMessage(const RuleCheckMessage& msg, bool zoomTo) noexcept;
+  void clearErcMarker() noexcept;
   void updateEmptySchematicMessage() noexcept;
   void updateComponentToolbarIcons() noexcept;
   void setGridProperties(const PositiveLength& interval, const LengthUnit& unit,
@@ -157,6 +160,7 @@ private:
   QScopedPointer<SchematicGraphicsScene> mGraphicsScene;
   QHash<Uuid, QRectF> mVisibleSceneRect;
   QScopedPointer<SchematicEditorFsm> mFsm;
+  QScopedPointer<QGraphicsPathItem> mErcLocationGraphicsItem;
 
   // Actions
   QScopedPointer<QAction> mActionAboutLibrePcb;

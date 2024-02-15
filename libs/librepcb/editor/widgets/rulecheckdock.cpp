@@ -42,7 +42,6 @@ RuleCheckDock::RuleCheckDock(Mode mode, QWidget* parent) noexcept
   mUi->setupUi(this);
   updateTitle(tl::nullopt);
   mUi->lstMessages->setHandler(this);
-  mUi->cbxCenterInView->setVisible(mode == Mode::BoardDesignRuleCheck);
   mUi->prgProgress->hide();
   mUi->btnSettings->setVisible(mode == Mode::BoardDesignRuleCheck);
   mUi->btnRunDrc->setVisible(mode == Mode::BoardDesignRuleCheck);
@@ -74,17 +73,13 @@ bool RuleCheckDock::setInteractive(bool interactive) noexcept {
 }
 
 void RuleCheckDock::setProgressPercent(int percent) noexcept {
-  if (mMode == Mode::BoardDesignRuleCheck) {
-    mUi->cbxCenterInView->hide();
-  }
+  mUi->cbxCenterInView->hide();
   mUi->prgProgress->show();
   mUi->prgProgress->setValue(percent);
 }
 
 void RuleCheckDock::setProgressStatus(const QString& status) noexcept {
-  if (mMode == Mode::BoardDesignRuleCheck) {
-    mUi->cbxCenterInView->hide();
-  }
+  mUi->cbxCenterInView->hide();
   mUi->prgProgress->show();
   mUi->prgProgress->setFormat(status);
 }
@@ -94,9 +89,7 @@ void RuleCheckDock::setMessages(
   mUi->prgProgress->hide();
   mUi->prgProgress->setValue(0);
   mUi->prgProgress->setFormat(QString());
-  if (mMode == Mode::BoardDesignRuleCheck) {
-    mUi->cbxCenterInView->show();
-  }
+  mUi->cbxCenterInView->show();
   mUi->lstMessages->setMessages(messages);
   updateTitle(mUi->lstMessages->getUnapprovedMessageCount());
 }
