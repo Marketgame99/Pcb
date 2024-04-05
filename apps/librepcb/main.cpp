@@ -31,7 +31,7 @@
 #include <librepcb/editor/project/partinformationprovider.h>
 #include <librepcb/editor/workspace/controlpanel/controlpanel.h>
 #include <librepcb/editor/workspace/initializeworkspacewizard/initializeworkspacewizard.h>
-
+#include <librepcb/core/fileio/fileutils.h>
 #include <QtCore>
 #include <QtWidgets>
 
@@ -80,9 +80,12 @@ int main(int argc, char* argv[]) {
   Application::loadBundledFonts();
   Application::setTranslationLocale(QLocale::system());
 
-  // This is to remove the ugly frames around widgets in all status bars...
-  // (from http://www.qtcentre.org/threads/1904)
-  app.setStyleSheet("QStatusBar::item { border: 0px solid black; }");
+  // Load stylesheet.
+  try {
+    app.setStyleSheet(FileUtils::readFile(Application::getResourcesDir().getPathTo("style.qss")));
+  } catch (const Exception& e) {
+    qCritical() << "Failed to load stylesheet:" << e.getMsg();
+  }
 
   // Start network access manager thread with HTTP cache to avoid extensive
   // requests (e.g. downloading library pictures each time opening the manager).
